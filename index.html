@@ -56,6 +56,7 @@
     <script>
         const quizContainer = document.getElementById('quiz');
         const resultsContainer = document.getElementById('results');
+        const progressContainer = document.getElementById('progress');
         const submitButton = document.getElementById('submit');
 
         const myQuestions = [
@@ -442,22 +443,20 @@
                         </label>`
                     );
                 }
+            }
+
+            quizContainer.innerHTML = `
+                <div class="question"> ${currentQuestion.question} </div>
+                <div class="answers"> ${answers.join('')} </div>
+            `;
+
+            // Aggiorna il progresso
+            updateProgress();
         }
-
-    quizContainer.innerHTML = `
-        <div class="question"> ${currentQuestion.question} </div>
-        <div class="answers"> ${answers.join('')} </div>
-    `;
-
-    // Aggiorna il progresso
-    updateProgress();
-}
-
 
         function updateProgress() {
             progressContainer.innerHTML = `Domanda ${currentQuestionIndex + 1} di ${shuffledQuestions.length}`;
         }
-
 
         function showResults() {
             const answerContainer = quizContainer.querySelector('.answers');
@@ -466,7 +465,7 @@
 
             const currentQuestion = shuffledQuestions[currentQuestionIndex];
             if (userAnswer === currentQuestion.correctAnswer) {
-                currentQuestionIndex++;
+                    currentQuestionIndex++;
                 if (currentQuestionIndex < shuffledQuestions.length) {
                     showQuestion();
                 } else {
@@ -480,7 +479,7 @@
 
         submitButton.addEventListener('click', showResults);
 
-        startQuiz();
+        startQuiz()
     </script>
 </body>
 </html>
