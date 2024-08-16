@@ -160,37 +160,34 @@
             }
         };
 
-        // Function to update the chart based on selection
-                // Function to update the chart based on selection
+        
         function updateChart(category, region) {
             let selectedData;
             let chartType = 'pie';
-
+        
+            // Correctly reference the data objects based on the category selected
+            let categoryData;
+            if (category === 'famiglia') {
+                categoryData = dataFamiglia;
+            } else if (category === 'classe') {
+                categoryData = dataClasse;
+            } else if (category === 'ordine') {
+                categoryData = dataOrdine;
+            }
+        
             if (region === 'all') {
                 // Use stacked bar chart for regions
                 selectedData = {
-                    labels: window[category].region.labels,
-                    datasets: window[category].region.datasets
+                    labels: categoryData.region.labels,
+                    datasets: categoryData.region.datasets
                 };
                 chartType = 'bar';
             } else {
-                let labels, data;
-                if (category === 'famiglia') {
-                    labels = ['Muricidae', 'Cymbuliidae'];
-                    data = region === 'est' ? dataFamiglia.est : dataFamiglia.ovest;
-                } else if (category === 'classe') {
-                    labels = ['Gastropoda', 'Cephalopoda', 'Echinoidea'];
-                    data = region === 'est' ? dataClasse.est : dataClasse.ovest;
-                } else if (category === 'ordine') {
-                    labels = ['Neogastropoda', 'Pteropoda', 'Elasmobranchii'];
-                    data = region === 'est' ? dataOrdine.est : dataOrdine.ovest;
-                }
-
                 selectedData = {
-                    labels: labels,
+                    labels: categoryData.region.datasets.map(dataset => dataset.label),
                     datasets: [{
                         label: category.charAt(0).toUpperCase() + category.slice(1),
-                        data: data,
+                        data: region === 'est' ? categoryData.est : categoryData.ovest,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -224,7 +221,7 @@
                     }]
                 };
             }
-
+        
             myChart.destroy(); // Destroy previous chart instance
             myChart = new Chart(ctx, {
                 type: chartType,
@@ -242,6 +239,9 @@
                 }
             });
         }
+         
+
+       
 
         // Initial Chart Setup
         const ctx = document.getElementById('chartContainer').getContext('2d');
