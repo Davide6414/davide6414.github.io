@@ -3,19 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grafici a Torta con Ingrandimento</title>
+    <title>Grafici a Torta Affiancati</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS per il layout flexbox */
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .chart-box {
+            width: 45%; /* Larghezza di ciascun grafico */
+            padding: 20px;
+        }
+
+        canvas {
+            width: 100%; /* Rendere il canvas responsive */
+            height: auto;
+        }
+    </style>
 </head>
 <body>
 
-    <div>
-        <h2>Distribuzione delle Classi (Ovest)</h2>
-        <canvas id="chartOvest"></canvas>
-    </div>
-    
-    <div>
-        <h2>Distribuzione delle Classi (Est)</h2>
-        <canvas id="chartEst"></canvas>
+    <div class="chart-container">
+        <div class="chart-box">
+            <h2>Distribuzione delle Classi (Ovest)</h2>
+            <canvas id="chartOvest"></canvas>
+        </div>
+        
+        <div class="chart-box">
+            <h2>Distribuzione delle Classi (Est)</h2>
+            <canvas id="chartEst"></canvas>
+        </div>
     </div>
 
     <script>
@@ -98,7 +119,7 @@
                     'rgba(75, 192, 192, 1)',
                 ],
                 borderWidth: 1,
-                hoverOffset: 10 // Aggiungere un offset per ingrandire la fetta al passaggio del mouse
+                hoverOffset: 50 // Aggiungere un offset per ingrandire la fetta al passaggio del mouse
             }]
         };
 
