@@ -3,141 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grafici a Torta Affiancati</title>
+    <title>Dynamic Chart Visualization</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* CSS per il layout flexbox */
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .controls select {
+            padding: 10px;
+            font-size: 16px;
+        }
+
         .chart-container {
             display: flex;
             justify-content: space-around;
-            align-items: center;
             flex-wrap: wrap;
         }
 
         .chart-box {
-            width: 45%; /* Larghezza di ciascun grafico */
+            width: 45%;
             padding: 20px;
         }
 
         canvas {
-            width: 100%; /* Rendere il canvas responsive */
+            width: 100%;
             height: auto;
         }
     </style>
 </head>
 <body>
 
+    <div class="controls">
+        <label for="categorySelect">Select Category:</label>
+        <select id="categorySelect">
+            <option value="famiglia">Famiglie</option>
+            <option value="classe">Classi</option>
+            <option value="ordine">Ordini</option>
+        </select>
+
+        <label for="regionSelect">Select Region:</label>
+        <select id="regionSelect">
+            <option value="est">Est</option>
+            <option value="ovest">Ovest</option>
+            <option value="all">All Regions</option>
+        </select>
+    </div>
+
     <div class="chart-container">
         <div class="chart-box">
-            <h2>Distribuzione delle Classi (Ovest)</h2>
-            <canvas id="chartOvest"></canvas>
-        </div>
-        
-        <div class="chart-box">
-            <h2>Distribuzione delle Classi (Est)</h2>
-            <canvas id="chartEst"></canvas>
+            <canvas id="chartContainer"></canvas>
         </div>
     </div>
 
     <script>
-        // Dati per il grafico Ovest
-        const dataOvest = {
-            labels: ['Hydrozoa', 'Gastropoda', 'Scyphozoa', 'Cephalopoda', 'Echinoidea', 'Asteroidea', 'Teleostei', 'Thaliacea', 'Elasmobranchii', 'Hidrozoa', 'Platelminti', 'Malacostraca', 'Holothuroidea', 'Ophiuroidea', 'Stolidobranchia'],
-            datasets: [{
-                label: 'Ovest',
-                data: [75, 35, 24, 9, 6, 4, 4, 4, 2, 2, 1, 1, 1, 1, 1],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                borderWidth: 1,
-                hoverOffset: 10 // Aggiungere un offset per ingrandire la fetta al passaggio del mouse
-            }]
-        };
-
-        // Configurazione del grafico Ovest
-        const configOvest = {
-            type: 'pie',
-            data: dataOvest,
-            options: {
-                responsive: true,
+        // Data Objects based on previous calculations
+        const dataFamiglia = {
+            est: [4, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0],  // Example data
+            ovest: [75, 35, 24, 9, 6, 4, 4, 2, 2, 1, 1, 1, 1, 1],  // Example data
+            region: {
+                labels: ['Liguria', 'Sicilia', 'Calabria', 'Francia', 'Portogallo', 'Toscana', 'Veneto', 'Grecia', 'Marche', 'Abruzzo', 'Campania', 'Malta', 'Spagna', 'Sardegna', 'Sabaudia nord', 'mar ionio'],  // Example regions
+                datasets: [
+                    {
+                        label: 'Muricidae',
+                        data: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Cymbuliidae',
+                        data: [26, 2, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }
+                    // Add other families as needed
+                ]
             }
         };
 
-        // Rendering del grafico Ovest
-        const chartOvest = new Chart(
-            document.getElementById('chartOvest'),
-            configOvest
-        );
-
-        // Dati per il grafico Est
-        const dataEst = {
-            labels: ['Scyphozoa', 'Hydrozoa', 'Gastropoda', 'Cephalopoda'],
-            datasets: [{
-                label: 'Est',
-                data: [4, 1, 1, 1],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                ],
-                borderWidth: 1,
-                hoverOffset: 50 // Aggiungere un offset per ingrandire la fetta al passaggio del mouse
-            }]
-        };
-
-        // Configurazione del grafico Est
-        const configEst = {
-            type: 'pie',
-            data: dataEst,
-            options: {
-                responsive: true,
+        const dataClasse = {
+            est: [/* Insert Est data for Classe here */],
+            ovest: [/* Insert Ovest data for Classe here */],
+            region: {
+                labels: [/* Region names here */],
+                datasets: [/* Insert datasets for each Classe by region here */]
             }
         };
 
-        // Rendering del grafico Est
-        const chartEst = new Chart(
-            document.getElementById('chartEst'),
-            configEst
-        );
+        const dataOrdine = {
+            est: [/* Insert Est data for Ordine here */],
+            ovest: [/* Insert Ovest data for Ordine here */],
+            region: {
+                labels: [/* Region names here */],
+                datasets: [/* Insert datasets for each Ordine by region here */]
+            }
+        };
+
+        // Function to update the chart based on selection
+        function updateChart(category, region) {
+            let selectedData;
+            let chartType = 'pie';
+
+            if (region === 'all') {
+                // Use stacked bar chart for regions
+                selectedData = {
+                    labels: window[category].region.labels,
+                    datasets: window[category].region.datasets
+                };
+                chartType = 'bar';
+            } else {
+                selectedData = {
+                    labels: [/* Insert labels for Famiglia/Classe/Ordine here */],
+                    datasets: [{
+                        label: category.charAt(0).toUpperCase() + category.slice(1),
+                        data: window[category][region],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1,
+                        hoverOffset: 10
+                    }]
+                };
+            }
+
+            myChart.destroy(); // Destroy previous chart instance
+            myChart = new Chart(ctx, {
+                type: chartType,
+                data: selectedData,
+                options: {
+                    responsive: true,
+                    scales: region === 'all' ? {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    } : {}
+                }
+            });
+        }
+
+        // Initial Chart Setup
+        const ctx = document.getElementById('chartContainer').getContext('2d');
+        let myChart = new Chart(ctx, {
+            type: 'pie',
+            data: { labels: [], datasets: [] }, // Empty initial data
+            options: {
+                responsive: true,
+            }
+        });
+
+        // Event listeners for dropdowns
+        document.getElementById('categorySelect').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const selectedRegion = document.getElementById('regionSelect').value;
+            updateChart(selectedCategory, selectedRegion);
+        });
+
+        document.getElementById('regionSelect').addEventListener('change', function() {
+            const selectedCategory = document.getElementById('categorySelect').value;
+            const selectedRegion = this.value;
+            updateChart(selectedCategory, selectedRegion);
+        });
+
+        // Initial load with default values
+        updateChart('famiglia', 'est');
     </script>
 
 </body>
 </html>
+
