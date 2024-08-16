@@ -65,49 +65,103 @@
     <script>
         // Data Objects based on previous calculations
         const dataFamiglia = {
-            est: [4, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0],  // Example data
-            ovest: [75, 35, 24, 9, 6, 4, 4, 2, 2, 1, 1, 1, 1, 1],  // Example data
+            est: [4, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0],  // Cymbuliidae, Cymothoidae, Dactylopteridae, Echinasteridae, Echinidae, Heliasteridae, Ophiuroidea, Pisasteridae, Stelleroidea, Stomatopod, Syllidae, Terebellidae, Thalassianthidae, Zygidae
+            ovest: [75, 35, 24, 9, 6, 4, 4, 2, 2, 1, 1, 1, 1, 1],  // Hydrozoa, Gastropoda, Scyphozoa, Cephalopoda, Echinoidea, Asteroidea, Teleostei, Thaliacea, Elasmobranchii, Hidrozoa, Platelminti, Malacostraca, Holothuroidea, Ophiuroidea
             region: {
-                labels: ['Liguria', 'Sicilia', 'Calabria', 'Francia', 'Portogallo', 'Toscana', 'Veneto', 'Grecia', 'Marche', 'Abruzzo', 'Campania', 'Malta', 'Spagna', 'Sardegna', 'Sabaudia nord', 'mar ionio'],  // Example regions
+                labels: ['Liguria', 'Sicilia', 'Calabria', 'Francia', 'Portogallo', 'Toscana', 'Veneto', 'Grecia', 'Marche', 'Abruzzo', 'Campania', 'Malta', 'Spagna', 'Sardegna', 'Sabaudia nord', 'mar ionio'],
                 datasets: [
                     {
                         label: 'Muricidae',
-                        data: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        data: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1
                     },
                     {
                         label: 'Cymbuliidae',
-                        data: [26, 2, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                        data: [26, 2, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
+                    },
+                    {
+                        label: 'Cymothoidae',
+                        data: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
                     }
-                    // Add other families as needed
+                    // Aggiungi altre famiglie se necessario
                 ]
             }
         };
 
         const dataClasse = {
-            est: [/* Insert Est data for Classe here */],
-            ovest: [/* Insert Ovest data for Classe here */],
+            est: [4, 1, 1, 1],  // Scyphozoa, Hydrozoa, Gastropoda, Cephalopoda
+            ovest: [75, 35, 24, 9, 6, 4, 4, 2, 2, 1, 1, 1, 1, 1],  // Hydrozoa, Gastropoda, Scyphozoa, Cephalopoda, Echinoidea, Asteroidea, Teleostei, Thaliacea, Elasmobranchii, Hidrozoa, Platelminti, Malacostraca, Holothuroidea, Ophiuroidea
             region: {
-                labels: [/* Region names here */],
-                datasets: [/* Insert datasets for each Classe by region here */]
+                labels: ['Liguria', 'Sicilia', 'Calabria', 'Francia', 'Portogallo', 'Toscana', 'Veneto', 'Grecia', 'Marche', 'Abruzzo', 'Campania', 'Malta', 'Spagna', 'Sardegna', 'Sabaudia nord', 'mar ionio'],
+                datasets: [
+                    {
+                        label: 'Gastropoda',
+                        data: [35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Cephalopoda',
+                        data: [9, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Echinoidea',
+                        data: [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }
+                    // Aggiungi altre classi se necessario
+                ]
             }
         };
 
         const dataOrdine = {
-            est: [/* Insert Est data for Ordine here */],
-            ovest: [/* Insert Ovest data for Ordine here */],
+            est: [4, 1, 0, 1],  // Pteropoda, Neogastropoda, Elasmobranchii, Stomiiformes
+            ovest: [75, 35, 24, 9, 6, 4, 4, 2, 2, 1, 1, 1, 1, 1],  // Neogastropoda, Pteropoda, Cephalopoda, Echinoidea, Asteroidea, Teleostei, Thaliacea, Elasmobranchii, Hidrozoa, Platelminti, Malacostraca, Holothuroidea, Ophiuroidea
             region: {
-                labels: [/* Region names here */],
-                datasets: [/* Insert datasets for each Ordine by region here */]
+                labels: ['Liguria', 'Sicilia', 'Calabria', 'Francia', 'Portogallo', 'Toscana', 'Veneto', 'Grecia', 'Marche', 'Abruzzo', 'Campania', 'Malta', 'Spagna', 'Sardegna', 'Sabaudia nord', 'mar ionio'],
+                datasets: [
+                    {
+                        label: 'Neogastropoda',
+                        data: [35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Pteropoda',
+                        data: [24, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Elasmobranchii',
+                        data: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }
+                    // Aggiungi altri ordini se necessario
+                ]
             }
         };
 
         // Function to update the chart based on selection
+                // Function to update the chart based on selection
         function updateChart(category, region) {
             let selectedData;
             let chartType = 'pie';
@@ -120,11 +174,23 @@
                 };
                 chartType = 'bar';
             } else {
+                let labels, data;
+                if (category === 'famiglia') {
+                    labels = ['Muricidae', 'Cymbuliidae'];
+                    data = region === 'est' ? dataFamiglia.est : dataFamiglia.ovest;
+                } else if (category === 'classe') {
+                    labels = ['Gastropoda', 'Cephalopoda', 'Echinoidea'];
+                    data = region === 'est' ? dataClasse.est : dataClasse.ovest;
+                } else if (category === 'ordine') {
+                    labels = ['Neogastropoda', 'Pteropoda', 'Elasmobranchii'];
+                    data = region === 'est' ? dataOrdine.est : dataOrdine.ovest;
+                }
+
                 selectedData = {
-                    labels: [/* Insert labels for Famiglia/Classe/Ordine here */],
+                    labels: labels,
                     datasets: [{
                         label: category.charAt(0).toUpperCase() + category.slice(1),
-                        data: window[category][region],
+                        data: data,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -202,7 +268,9 @@
 
         // Initial load with default values
         updateChart('famiglia', 'est');
-    </script>
+</script>
+
+
 
 </body>
 </html>
