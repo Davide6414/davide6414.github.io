@@ -3,483 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
-     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        #quiz {
-            margin: 20px 0;
-        }
-        .question {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-        .answers {
-            margin-bottom: 20px;
-        }
-        .answer {
-            display: block;
-            margin-bottom: 5px;
-        }
-        #submit {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        #results {
-            font-size: 1.2em;
-            margin-top: 20px;
-        }
-    </style>
+    <title>Grafici a Torta</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div id="quiz"></div>
-    <div id="results"></div>
-    <div id="progress"></div>
-    <button id="submit">Submit</button>
+
+    <div>
+        <h2>Distribuzione delle Classi (Ovest)</h2>
+        <canvas id="chartOvest"></canvas>
+    </div>
+    
+    <div>
+        <h2>Distribuzione delle Classi (Est)</h2>
+        <canvas id="chartEst"></canvas>
+    </div>
 
     <script>
-        const quizContainer = document.getElementById('quiz');
-        const resultsContainer = document.getElementById('results');
-        const progressContainer = document.getElementById('progress');
-        const submitButton = document.getElementById('submit');
+        // Dati per il grafico Ovest
+        const dataOvest = {
+            labels: ['Hydrozoa', 'Gastropoda', 'Scyphozoa', 'Cephalopoda', 'Echinoidea', 'Asteroidea', 'Teleostei', 'Thaliacea', 'Elasmobranchii', 'Hidrozoa', 'Platelminti', 'Malacostraca', 'Holothuroidea', 'Ophiuroidea', 'Stolidobranchia'],
+            datasets: [{
+                label: 'Ovest',
+                data: [75, 35, 24, 9, 6, 4, 4, 4, 2, 2, 1, 1, 1, 1, 1],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
 
-        const myQuestions = [
-            {
-                question: "Il PVC è un materiale molto utilizzato in acquariologia. Quale di queste proprietà non serve?",
-                answers: {
-                    a: "Atossicità",
-                    b: "Leggerezza",
-                    c: "Resistenza alla corrosione",
-                    d: ""
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "Per ottenere una schiumazione più efficiente è preferibile che le bolle siano:",
-                answers: {
-                    a: "Grandi",
-                    b: "Piccole",
-                    c: "Non c'è una regola",
-                    d: ""
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "Quale fra questi non è un metodo per rimuovere in modo diretto l'ammoniaca dall'acqua?",
-                answers: {
-                    a: "Schiumazione",
-                    b: "Scambio ionico",
-                    c: "Biofiltrazione",
-                    d: "Air stripping"
-                },
-                correctAnswer: "a"
-            },
-            {
-                question: "l'ammoniaca è più tossica se presente nella sua forma indissociata nh3 o nella forma dissociata nh4 (ione ammonio) ",
-                answers: {
-                    a: "Sono ugualmente tossiche",
-                    b: "nella sua forma indissociata nh3",
-                    c: "nella sua forma dissociata nh4+(ione ammonio)",
-                    d: "Dipende dalla temperatura e dal ph"
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "Qual è l'unità di misura della torbidità?",
-                answers: {
-                    a: "NTU",
-                    b: "BTU",
-                    c: "CPU",
-                    d: ""
-                },
-                correctAnswer: "a"
-            },
-            {
-                question: "Per quali microorganismi è necessario un dosaggio degli UV minore?",
-                answers: {
-                    a: "Batteri",
-                    b: "Protozoi",
-                    c: "Virus",
-                    d: ""
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Una tra queste tipologie di filtro meccanico non esiste, quale?",
-                answers: {
-                    a: "Filtri a cartuccia",
-                    b: "Filtri a conchiglia",
-                    c: "Filtri a tamburo",
-                    d: "Filtri a sabbia"
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "Quale tra queste è la formula per calcolare la dose di UV?",
-                answers: {
-                    a: "IxT",
-                    b: "Lambda x T",
-                    c: "I/T x Lambda",
-                    d: ""
-                },
-                correctAnswer: "a"
-            },
-            {
-                question: "Che cosa sono i TRO?",
-                answers: {
-                    a: "Ossidanti volatili",
-                    b: "Ossidanti residui totali",
-                    c: "Riducenti totali ossidanti",
-                    d: "Tempi di reazione ossidanti"
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "La corretta regolazione del flusso di una pompa avviene:",
-                answers: {
-                    a: "In aspirazione",
-                    b: "Indifferentemente in mandata o in aspirazione",
-                    c: "In mandata",
-                    d: "Dipende dal tipo di impianto"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Quale tra queste affermazioni è falsa?",
-                answers: {
-                    a: "A parità di portata una pompa con numero di giri più basso è più silenziosa",
-                    b: "A parità di portata una pompa con numero di giri più basso ha un girante più grande",
-                    c: "A parità di portata una pompa con numero di giri piu basso è meno efficiente",
-                    d: "A parità di portata una pompa con numero di giri"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Il reattore a calcio serve a:",
-                answers: {
-                    a: "Eliminare l'eccesso di calcio dall'acqua della vasca",
-                    b: "Filtrare meccanicamente l'acqua",
-                    c: "Trasformare il calcio nella vasca in sabbia",
-                    d: "Aggiungere calcio all'acqua della vasca"
-                },
-                correctAnswer: "d"
-            },
-            {
-                question: "Che cosa si utilizza per neutralizzare i TRO?",
-                answers: {
-                    a: "Cloruro di ammonio",
-                    b: "Bismuto di potassio",
-                    c: "Tiosolfato di sodio",
-                    d: "Idrossido di sodio"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Quale sigla si usa per indicare la pressione massima alla quale può essere sottoposta un tubo, raccordo o valvola?",
-                answers: {
-                    a: "PN",
-                    b: "PEAD",
-                    c: "DN",
-                    d: "PVC"
-                },
-                correctAnswer: "a"
-            },
-            {
-                question: "Quale di questi parametri è ininfluente per il calcolo del dosaggio necessario per sterilizzare un dato microorganismo?",
-                answers: {
-                    a: "La grandezza",
-                    b: "La trasmismittanza del liquido",
-                    c: "La tipologia di acqua dolce/salata",
-                    d: "La velocità di flusso"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "La sigla PMMA significa:",
-                answers: {
-                    a: "Polimetilmacroacetato",
-                    b: "Polimetilmetacrilato",
-                    c: "Polimetilmonacrilato",
-                    d: "Polimetalmetacrilato"
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "Quale fra queste non è una fase della progettazione?",
-                answers: {
-                    a: "Esecutiva",
-                    b: "Realizzativa",
-                    c: "Definitiva",
-                    d: ""
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "Che cos'è l'ORP?",
-                answers: {
-                    a: "Gli ossidanti presenti nell'acqua",
-                    b: "Un potenziale elettrico",
-                    c: "L'ozono disciolto",
-                    d: ""
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "L'ozono è:",
-                answers: {
-                    a: "Un agente fortemente riducente",
-                    b: "Un agente fortemente acido",
-                    c: "Un agente fortemente ossidante",
-                    d: "Un agente fortemente basico"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Gli scambiatori di calore lavorano più efficacemente se lo scambio avviene:",
-                answers: {
-                    a: "Nello stesso senso di corrente",
-                    b: "Ad alta pressione",
-                    c: "Controcorrente",
-                    d: "A bassa pressione"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Quale di queste formule è corretta?",
-                answers: {
-                    a: "Q= 0,785 V2D",
-                    b: "Q= 0,785 D2V",
-                    c: "Q= 0,875 DV2",
-                    d: ""
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "Quale tra queste valvole non serve per la regolazione della portata?",
-                answers: {
-                    a: "Sede inclinata",
-                    b: "Farfalla",
-                    c: "Sfera",
-                    d: ""
-                },
-                correctAnswer: "a"
-            },
-            {
-                question: "Quali sono i range in cui dovrebbe stare il DOA per vasche con un normale carico biologico?",
-                answers: {
-                    a: "Flocculazione (schiumatoio di proteine) 0.001-0,005 Ossidazione ",
-                    b: "Disinfezione (camere di contatto) 0,01-0,05-0,10-1 mg/litro",
-                    c: "Flocculazione (schiumatoio di proteine)0,01-0,05Ossidazione0,10-1,00mg/litro/mg/litro",
-                    d: ""
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Quale tra queste affermazioni non è vera?",
-                answers: {
-                    a: "Il protein skimmer rimuove le proteine",
-                    b: "Il protein skimmer aiuta la filtrazione meccanica",
-                    c: "Il protein skimmer aiuta a mantenere e conservare la T dell'acqua",
-                    d: "Il protein skimmer aiuta la sterilizzazione dell'acqua"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Che cosa bisognerebbe usare come punto di partenza per la strategia di dosaggio di ozono?",
-                answers: {
-                    a: "TRO",
-                    b: "ORP",
-                    c: "DOA",
-                    d: ""
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Quali tra questi batteri ossidano l'ammoniaca a nitriti?",
-                answers: {
-                    a: "Nitrosanti",
-                    b: "Denitrificanti",
-                    c: "Nitritogeni",
-                    d: "Nitritigeni"
-                },
-                correctAnswer: "a"
-            },
-            {
-                question: "Quale fra le seguenti è l'unità di misura della portata?",
-                answers: {
-                    a: "kg/h",
-                    b: "m/l",
-                    c: "m3/h",
-                    d: "m2/h"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Ogni quante ore va sostituita una lampada UV?",
-                answers: {
-                    a: "2000",
-                    b: "4200",
-                    c: "8000",
-                    d: ""
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Qual è il materiale preferito per le lamelle di uno scambiatore di calore in un circuito di acqua di mare?",
-                answers: {
-                    a: "Ferro",
-                    b: "Platino",
-                    c: "Titanio",
-                    d: "Kevlar"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Quali sono i valori ottimali di ORP in un acquario?",
-                answers: {
-                    a: "300-380 mV",
-                    b: "0,1-1 mg/l",
-                    c: "260-390 mV",
-                    d: "1-5 mg/l"
-                },
-                correctAnswer: "a"
-            },
-            {
-                question: "Quali sono i due parametri primariamente utilizzati per la scelta di una pompa centrifuga?",
-                answers: {
-                    a: "Portata e prevalenza",
-                    b: "Dimensioni e peso",
-                    c: "Potenza e numero di giri",
-                    d: ""
-                },
-                correctAnswer: "a"
-            },
-            {
-                question: "Che cos'è il DOA?",
-                answers: {
-                    a: "Dose ossidanti applicata",
-                    b: "Dose ORP applicata",
-                    c: "Dose di ozono applicata",
-                    d: "Dose di ossigeno applicata"
-                },
-                correctAnswer: "c"
-            },
-            {
-                question: "Quali di questi materiali non viene utilizzato per realizzare le finestre degli acquari?",
-                answers: {
-                    a: "Polimetacrilato",
-                    b: "Policarbonato",
-                    c: "Vetro",
-                    d: ""
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "Quale di queste affermazioni riguardo il funzionamento di un degerminatore UV è falsa?",
-                answers: {
-                    a: "Si devono avere acque limpide",
-                    b: "Le concentrazioni di Ca e Zn non devono superare 0,5 mg/L e 0,8 mg/L",
-                    c: "Lunghezze d'onda errate possono stimolare meccanismi di difesa nei microorganismi",
-                    d: "Le concentrazioni di Fe e Mn non devono superare 0,2 mg/L e 0,05 mg/L"
-                },
-                correctAnswer: "b"
-            },
-            {
-                question: "Quale tra questi materiali atossici non è utilizzabile come mezzo di riempimento per il filtro biologico?",
-                answers: {
-                    a: "Gusci di conchiglia frantumati",
-                    b: "Cannolicchi di ceramica",
-                    c: "Trucioli di legno",
-                    d: "Palline di plastica"
-                },
-                correctAnswer: "c"
+        // Configurazione del grafico Ovest
+        const configOvest = {
+            type: 'pie',
+            data: dataOvest,
+            options: {
+                responsive: true,
             }
-        ];
+        };
 
-        let currentQuestionIndex = 0;
-        let shuffledQuestions = [];
+        // Rendering del grafico Ovest
+        const chartOvest = new Chart(
+            document.getElementById('chartOvest'),
+            configOvest
+        );
 
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+        // Dati per il grafico Est
+        const dataEst = {
+            labels: ['Scyphozoa', 'Hydrozoa', 'Gastropoda', 'Cephalopoda'],
+            datasets: [{
+                label: 'Est',
+                data: [4, 1, 1, 1],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Configurazione del grafico Est
+        const configEst = {
+            type: 'pie',
+            data: dataEst,
+            options: {
+                responsive: true,
             }
-            return array;
-        }
+        };
 
-        function startQuiz() {
-            shuffledQuestions = shuffle([...myQuestions]);
-            currentQuestionIndex = 0;
-            showQuestion();
-            resultsContainer.innerHTML = '';
-        }
-
-        function showQuestion() {
-            const currentQuestion = shuffledQuestions[currentQuestionIndex];
-            const answers = [];
-
-            for (let letter in currentQuestion.answers) {
-                if (currentQuestion.answers[letter]) {
-                    answers.push(
-                        `<label class="answer">
-                            <input type="radio" name="question" value="${letter}">
-                            ${letter} : ${currentQuestion.answers[letter]}
-                        </label>`
-                    );
-                }
-            }
-
-            quizContainer.innerHTML = `
-                <div class="question"> ${currentQuestion.question} </div>
-                <div class="answers"> ${answers.join('')} </div>
-            `;
-
-            // Aggiorna il progresso
-            updateProgress();
-        }
-
-        function updateProgress() {
-            progressContainer.innerHTML = `Domanda ${currentQuestionIndex + 1} di ${shuffledQuestions.length}`;
-        }
-
-        function showResults() {
-            const answerContainer = quizContainer.querySelector('.answers');
-            const selector = 'input[name=question]:checked';
-            const userAnswer = (answerContainer.querySelector(selector) || {}).value;
-
-            const currentQuestion = shuffledQuestions[currentQuestionIndex];
-            if (userAnswer === currentQuestion.correctAnswer) {
-                    currentQuestionIndex++;
-                if (currentQuestionIndex < shuffledQuestions.length) {
-                    showQuestion();
-                } else {
-                    resultsContainer.innerHTML = 'Bravo! Hai risposto correttamente a tutte le domande. Hai vinto!';
-                }
-            } else {
-                resultsContainer.innerHTML = `Hai sbagliato una risposta. Ricomincia il quiz. La risposta corretta era: ${currentQuestion.correctAnswer}`;
-                setTimeout(startQuiz, 3000);
-            }
-        }
-
-        submitButton.addEventListener('click', showResults);
-
-        startQuiz()
+        // Rendering del grafico Est
+        const chartEst = new Chart(
+            document.getElementById('chartEst'),
+            configEst
+        );
     </script>
+
 </body>
 </html>
